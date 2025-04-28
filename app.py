@@ -1,5 +1,7 @@
 import streamlit as st
 import pickle
+import numpy as np
+
 
 # Load the Random Forest model
 with open('tunedRF.pkl', 'rb') as f:
@@ -17,6 +19,5 @@ feature4 = st.number_input('Feature 4', value=0.0)
 
 # Prediction
 if st.button('Predict'):
-    input_data = [[feature1, feature2, feature3, feature4]]  # must match model input size
-    prediction = model.predict([input_data])
+    input_data = [feature1, feature2, feature3, feature4]
     st.success(f"Prediction: {prediction[0]}")
