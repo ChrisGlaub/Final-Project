@@ -23,15 +23,27 @@ with open(MODEL_PATH, 'rb') as f:
 # 2. Page configuration
 # —————————————
 st.set_page_config(page_title="Salary Prediction App", layout="wide")
-st.title("💼 Salary Prediction App")
-st.write("Use the sidebar to enter your details and click Predict.")
 
 # —————————————
-# 3. Sidebar inputs
+# 3. Pink banner title
 # —————————————
-st.sidebar.header("Enter Your Details")
+st.markdown(
+    """
+    <div style="background-color:#FF69B4;padding:20px;border-radius:10px;margin-bottom:20px">
+      <h1 style="color:white;text-align:center;margin:0;">💼 Salary Prediction App</h1>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
-# 3a) Numeric features (label, min, max, step)
+st.write("Use the form below to enter your details and click Predict.")
+
+# —————————————
+# 4. Main-area inputs (above the result)
+# —————————————
+st.header("Enter Your Details")
+
+# 4a) Numeric features
 numeric_features = [
     ("Years of Coding Experience", 0.0, 50.0, 1.0),
     ("Years of Machine Learning Experience", 0.0, 50.0, 1.0),
@@ -40,10 +52,10 @@ numeric_features = [
 
 inputs = []
 for label, vmin, vmax, step in numeric_features:
-    val = st.sidebar.slider(label, min_value=vmin, max_value=vmax, value=vmin, step=step)
+    val = st.slider(label, min_value=vmin, max_value=vmax, value=vmin, step=step)
     inputs.append(val)
 
-# 3b) Country one-hot
+# 4b) Country one-hot
 countries = [
     "United States of America",
     "Canada",
@@ -67,21 +79,20 @@ countries = [
     "Spain",
     "Other"
 ]
-country = st.sidebar.selectbox("Country", countries)
+country = st.selectbox("Country", countries)
 for c in countries:
     inputs.append(1 if c == country else 0)
 
 # —————————————
-# 4. Prediction
+# 5. Prediction & result
 # —————————————
 st.subheader("Prediction Result")
-if st.sidebar.button("Predict"):
+if st.button("Predict"):
     X_new = np.array([inputs])
     pred = model.predict(X_new)[0]
-
-    # Format with two decimals and comma separators
     salary = f"${pred:,.2f}"
     st.success(f"🎯 Predicted Salary: {salary}")
+
 
 
 
