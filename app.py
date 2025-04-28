@@ -6,6 +6,7 @@ with open('tunedRF.pkl', 'rb') as f:
     model = pickle.load(f)
 
 st.title("Random Forest Prediction App")
+st.write(f"Model expects {model.n_features_in_} features.")
 
 # Example input fields
 st.subheader("Input Features")
