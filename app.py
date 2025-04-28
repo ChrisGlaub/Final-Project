@@ -3,40 +3,63 @@ import pickle
 import numpy as np
 import locale
 
-# Load the trained Random Forest model
+# —————————————
+# 1. Load your model
+# —————————————
 with open('final_rf_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-# Set up the page and title
-st.set_page_config(page_title="Prediction App", layout="wide")
-st.title("Random Forest Prediction App")
-st.write("Fill out the features in the sidebar and click Predict.")
+# —————————————
+# 2. Page configuration
+# —————————————
+st.set_page_config(page_title="Salary Prediction App", layout="wide")
+st.title("💼 Salary Prediction App")
+st.write("Use the sidebar to enter your info, then click Predict")
 
-# Sidebar for Inputs
-st.sidebar.header("Enter Feature Values")
-feature1 = st.sidebar.slider('Feature 1', min_value=0.0, max_value=100.0, value=0.0)
-feature2 = st.sidebar.slider('Feature 2', min_value=0.0, max_value=100.0, value=0.0)
-feature3 = st.sidebar.slider('Feature 3', min_value=0.0, max_value=100.0, value=0.0)
+# —————————————
+# 3. Sidebar inputs
+# —————————————
+st.sidebar.header("Enter Your Details")
 
-# Include other country features as binary
-# For example:
-# feature4 = st.sidebar.selectbox('Country: United States', options=[0, 1])
+# 3a) Numeric features: (label, min, max, step)
+numeric_features = [
+    ("Years of Coding Experience", 0.0, 50.0, 1.0),
+    ("Years of Machine Learning Experience", 0.0, 50.0, 1.0),
+    ("Money Spent on ML/Cloud in Last 5 Years ($)", 0, 100_000, 1_000),
+    # … add any other continuous inputs here …
+]
 
-# Combine the inputs into an array
-input_data = [feature1, feature2, feature3]  # Add other features as needed
-input_data = np.array([input_data])  # Convert to numpy array for model prediction
+inputs = []
+for label, vmin, vmax, step in numeric_features:
+    val = st.sidebar.slider(label, min_value=vmin, max_value=vmax, value=vmin, step=step)
+    inputs.append(val)
 
-# Main Prediction Area
-st.subheader("Prediction Result")
+# 3b) Country (one‐hot):
+countries = [
+    "United States of America","Canada","United Kingdom","France",
+    "Germany","India","Brazil","China","Japan","Australia",
+    # … fill in all ~20 country names exactly as your dummy columns …
+]
+country = st.sidebar.selectbox("Country", countries)
+for c in countries:
+    inputs.append(1 if c == country else 0)
 
-# Prediction
-if st.button('Predict'):
-    prediction = model.predict(input_data)
+# —————————————
+# 4. Predict button
+# —————————————
+if st.sidebar.button("Predict"):
+    # Convert to 2D array for sklearn
+    X_new = np.array([inputs])
+    pred = model.predict(X_new)[0]
 
-    # Format the output as a salary
-    locale.setlocale(locale.LC_ALL, '')
-    formatted_salary = locale.currency(prediction[0], grouping=True)
-    st.success(f"Predicted Salary: {formatted_salary}")
+    # Format as currency
+    locale.setlocale(locale.LC_ALL, '')            # use system locale
+    salary = locale.currency(pred, grouping=True)
+
+    # Display result
+    st.subheader("🎯 Predicted Salary")
+    st.success(salary)
+
 
 
 
