@@ -96,6 +96,9 @@ if st.button("I want a fun fact"):
     fact = random.choice(fun_facts)
     st.info(f"💡 Fun Fact: {fact}")
 
+st.markdown("---")
+st.markdown("##### Built by: Christian Glauber")
+
 
 
 
