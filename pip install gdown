@@ -1,0 +1,13 @@
+import gdown
+import pandas as pd
+
+# ▶️ 1) Download the CSV from Drive
+file_id = "1ij4RLvCK9KlCmwNA5qDXvl6S1bMBWb1z"
+url = https://drive.google.com/file/d/1ij4RLvCK9KlCmwNA5qDXvl6S1bMBWb1z/view?usp=drive_link"
+output = "your_data.csv"
+
+# This will only re-download if the file isn’t already present
+gdown.download(url, output, quiet=False)
+
+# ▶️ 2) Read it into pandas
+df = pd.read_csv(output)
