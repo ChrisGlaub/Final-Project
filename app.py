@@ -18,5 +18,5 @@ feature4 = st.number_input('Feature 4', value=0.0)
 # Prediction
 if st.button('Predict'):
     input_data = [[feature1, feature2, feature3, feature4]]  # must match model input size
-    prediction = model.predict(input_data)
+    prediction = model.predict([input_data])
     st.success(f"Prediction: {prediction[0]}")
