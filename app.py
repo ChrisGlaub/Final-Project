@@ -2,7 +2,6 @@ import os
 import streamlit as st
 import pickle
 import numpy as np
-import locale
 
 # —————————————
 # 0. Download model if missing
@@ -80,10 +79,10 @@ if st.sidebar.button("Predict"):
     X_new = np.array([inputs])
     pred = model.predict(X_new)[0]
 
-    locale.setlocale(locale.LC_ALL, '')  
-    salary = locale.currency(pred, grouping=True)
-
+    # Format with two decimals and comma separators
+    salary = f"${pred:,.2f}"
     st.success(f"🎯 Predicted Salary: {salary}")
+
 
 
 
